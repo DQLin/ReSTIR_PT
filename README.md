@@ -2,7 +2,14 @@
 ![](teaser.jpg)
 
 ## Introduction
-- This repo includes the source code for the SIGGRAPH 2022 [paper](https://research.nvidia.com/publication/2022-07_generalized-resampled-importance-sampling-foundations-restir) Generalized Resampled Importance Sampling: Foundations of ReSTIR \[Lin et al. 2022\]. ReSTIR Path Tracing (ReSTIR PT) is an resampling-based path tracing algorithm as the result of applying the GRIS theory to ReSTIR. Compared to ReSTIR GI \[Ouyang et al. 2021\], ReSTIR PT handles general types of light transport. The path reuse quality is significantly improved by a context-aware shift mapping, allowing interactive rendering of many-bounce diffuse and specular lighting with high quality.
+- This repo includes the source code for the following SIGGRAPH 2022 paper
+
+> **Generalized Resampled Importance Sampling: Foundations of ReSTIR**<br>
+> Daqi Lin* (University of Utah), Markus Kettunen* (NVIDIA), Benedikt Bitterli (NVIDIA), Jacopo Pantaleoni (NVIDIA), Cem Yuksel (University of Utah), Chris Wyman (NVIDIA)<br>
+> (*Joint first authors) <br>
+> https://research.nvidia.com/publication/2022-07_generalized-resampled-importance-sampling-foundations-restir
+
+ReSTIR Path Tracing (ReSTIR PT) is a resampling-based path tracing algorithm as the result of applying the GRIS theory to ReSTIR. Compared to ReSTIR GI \[Ouyang et al. 2021\], ReSTIR PT handles general types of light transport. The path reuse quality is significantly improved by a context-aware shift mapping, allowing interactive rendering of many-bounce diffuse and specular lighting with high quality.
 
 - The method is implemented as a render pass called "ReSTIRPTPass" (Source\RenderPasses\ReSTIRPass) in Falcor 4.4.
 See README_Falcor.md for the original README file provided by Falcor.
