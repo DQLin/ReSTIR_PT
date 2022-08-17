@@ -140,7 +140,7 @@ float3 computeShiftedIntegrandHybrid(const RestirPathTracerParams params, bool u
 
         if (params.localStrategyType & (uint)LocalStrategy::RoughnessCondition)
         {
-            bool isSpecularBounce = srcReservoir.pathFlags.decodeIsSpecularBounce(true, false);
+            bool isSpecularBounce = srcReservoir.pathFlags.decodeIsSpecularBounce(true);
 
             bool isLastVertexClassifiedAsRough = kSeparatePathBSDF ?
                 (isSpecularBounce ? dstPrimarySd.linearRoughness > params.specularRoughnessThreshold : hasRoughComponent(dstPrimarySd, 1.f)) :
@@ -249,8 +249,8 @@ float3 computeShiftedIntegrandReconnectionPathTree(const RestirPathTracerParams 
     srcPrimarySd.posW = srcPrimarySd.computeNewRayOrigin(!isTransmission);
     dstPrimarySd.posW = dstPrimarySd.computeNewRayOrigin(!isTransmission);
 
-    bool isDelta1 = srcReservoir.pathFlags.decodeIsDeltaEvent(true, false);
-    bool isDelta2 = srcReservoir.pathFlags.decodeIsDeltaEvent(false, false);
+    bool isDelta1 = srcReservoir.pathFlags.decodeIsDeltaEvent(true);
+    bool isDelta2 = srcReservoir.pathFlags.decodeIsDeltaEvent(false);
 
     // delta bounce before/after rcVertex (if isRcVertexNEE, deltaAfterRc won't be set)
     if (isDelta1 || isDelta2)
@@ -276,7 +276,7 @@ float3 computeShiftedIntegrandReconnectionPathTree(const RestirPathTracerParams 
     // assuming BSDF sampling
     assert(kUseBSDFSampling);
 
-    uint allowedSampledTypes1 = getAllowedBSDFFlags(srcReservoir.pathFlags.decodeIsSpecularBounce(true, false));
+    uint allowedSampledTypes1 = getAllowedBSDFFlags(srcReservoir.pathFlags.decodeIsSpecularBounce(true));
 
     // assuming bsdf sampling
     float dstPDF1 = evalPdfBSDF(dstPrimarySd, dstConnectionV, allowedSampledTypes1, isDelta1);
@@ -312,7 +312,7 @@ float3 computeShiftedIntegrandReconnectionPathTree(const RestirPathTracerParams 
         dstIntegrandNEE *= misWeightNEE;
     }
 
-    uint allowedSampledTypes2 = getAllowedBSDFFlags(srcReservoir.pathFlags.decodeIsSpecularBounce(false, false));
+    uint allowedSampledTypes2 = getAllowedBSDFFlags(srcReservoir.pathFlags.decodeIsSpecularBounce(false));
 
     float3 dstIntegrandBSDFSampling = 0;
 
@@ -394,8 +394,8 @@ float3 computeShiftedIntegrandReconnection(const RestirPathTracerParams params, 
     float3 rcVertexWi = srcReservoir.rcVertexWi[0];
     bool rcVertexHitExists = rcVertexHit.isValid();
 
-    bool isTransmission = srcReservoir.pathFlags.decodeIsTransmissionEvent(true, false);
-    uint allowedSampledTypes1 = getAllowedBSDFFlags(srcReservoir.pathFlags.decodeIsSpecularBounce(true, false));
+    bool isTransmission = srcReservoir.pathFlags.decodeIsTransmissionEvent(true);
+    uint allowedSampledTypes1 = getAllowedBSDFFlags(srcReservoir.pathFlags.decodeIsSpecularBounce(true));
 
     srcPrimarySd.posW = srcPrimarySd.computeNewRayOrigin(!isTransmission);
     dstPrimarySd.posW = dstPrimarySd.computeNewRayOrigin(!isTransmission);
@@ -435,8 +435,8 @@ float3 computeShiftedIntegrandReconnection(const RestirPathTracerParams params, 
     bool isRcVertexEscapedVertex = srcReservoir.pathFlags.pathLength() + 1 == rcVertexLength && !srcReservoir.pathFlags.lastVertexNEE();
     bool isRcVertexNEE = isRcVertexFinal && srcReservoir.pathFlags.lastVertexNEE();
 
-    bool isDelta1 = srcReservoir.pathFlags.decodeIsDeltaEvent(true, false);
-    bool isDelta2 = srcReservoir.pathFlags.decodeIsDeltaEvent(false, false);
+    bool isDelta1 = srcReservoir.pathFlags.decodeIsDeltaEvent(true);
+    bool isDelta2 = srcReservoir.pathFlags.decodeIsDeltaEvent(false);
 
     // delta bounce before/after rcVertex (if isRcVertexNEE, deltaAfterRc won't be set)
     if (isDelta1 || isDelta2) return 0.f;
@@ -490,7 +490,7 @@ float3 computeShiftedIntegrandReconnection(const RestirPathTracerParams params, 
     float dstRcVertexScatterPdf = 1.f; 
     float srcRcVertexScatterPdf = 1.f;  
 
-    uint allowedSampledTypes2 = isRcVertexNEE ? -1 : getAllowedBSDFFlags(srcReservoir.pathFlags.decodeIsSpecularBounce(false, false));
+    uint allowedSampledTypes2 = isRcVertexNEE ? -1 : getAllowedBSDFFlags(srcReservoir.pathFlags.decodeIsSpecularBounce(false));
 
     if (!isRcVertexEscapedVertex)
     {

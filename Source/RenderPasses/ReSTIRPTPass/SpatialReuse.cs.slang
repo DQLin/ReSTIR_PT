@@ -569,8 +569,8 @@ struct PathReusePass
                     }
                     else
                     {
-                        bool isDiffusePrimaryHit = !dstReservoir.pathFlags.decodeIsSpecularBounce(true, false);
-                        bool isSpecularPrimaryHit = dstReservoir.pathFlags.decodeIsSpecularBounce(true, false) && !dstReservoir.pathFlags.decodeIsDeltaEvent(true, false);
+                        bool isDiffusePrimaryHit = !dstReservoir.pathFlags.decodeIsSpecularBounce(true);
+                        bool isSpecularPrimaryHit = dstReservoir.pathFlags.decodeIsSpecularBounce(true) && !dstReservoir.pathFlags.decodeIsDeltaEvent(true);
 
                         reflectance = computeSampleReflectance(kUseNRDDemodulation, isDiffusePrimaryHit, isSpecularPrimaryHit, centralPrimarySd);
 

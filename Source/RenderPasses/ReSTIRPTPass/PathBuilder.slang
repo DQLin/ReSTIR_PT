@@ -62,7 +62,7 @@ struct PathBuilder
 
         if (pathLength >= 1)
         {
-            bool is_rcVertex = useHybridShift && pathLength == 1 || pathLength == rcVertexLength; // this might change later
+            bool is_rcVertex = pathLength == rcVertexLength;
 
 #if BPR
             pathReservoir.F += pathWeight;
@@ -122,7 +122,7 @@ struct PathBuilder
 
         if (pathLength >= 1)
         {
-            bool is_rcVertex = useHybridShift && pathLength == 1 || pathLength == rcVertexLength; // this might change later
+            bool is_rcVertex = pathLength == rcVertexLength;
 
 #if BPR
             pathReservoir.F += pathWeight;
@@ -185,9 +185,9 @@ struct PathBuilder
         pathReservoir.pathFlags.insertRcVertexLength(pathLength);
 
         pathReservoir.rcVertexHit.initFromHitInfo(hit);
-        pathReservoir.pathFlags.insertIsDeltaEvent(isDelta, true, false);
-        pathReservoir.pathFlags.insertIsTransmissionEvent(isTransmission, true, false);
-        pathReservoir.pathFlags.insertIsSpecularBounce(isSpecularBounce, true, false);
+        pathReservoir.pathFlags.insertIsDeltaEvent(isDelta, true);
+        pathReservoir.pathFlags.insertIsTransmissionEvent(isTransmission, true);
+        pathReservoir.pathFlags.insertIsSpecularBounce(isSpecularBounce, true);
         pathReservoir.lightPdf = lightPdf;
         pathReservoir.cachedJacobian.x = prevScatterPdf;
         pathReservoir.pathFlags.insertLightType(lightType);

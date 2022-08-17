@@ -22,96 +22,70 @@ struct ReSTIRPathFlags
 {
     int flags = 0;
 
+    // this struct can store bounce type information for two vertices
     [mutating]
-    void insertIsDeltaEvent(bool isDeltaEvent, bool beforeRcVertex, bool isSecondRcVertex)
+    void insertIsDeltaEvent(bool isDeltaEvent, bool beforeRcVertex)
     {
-        if (isSecondRcVertex)
-        {
-            flags &= (beforeRcVertex ? ~(0x1000) : ~(0x2000));
-            if (isDeltaEvent) flags |= 1 << (beforeRcVertex ? 12 : 13);
-        }
-        else
-        {
-            flags &= (beforeRcVertex ? ~(0x100) : ~(0x200));
-            if (isDeltaEvent) flags |= 1 << (beforeRcVertex ? 8 : 9);
-        }
+        flags &= (beforeRcVertex ? ~(0x100) : ~(0x200));
+        if (isDeltaEvent) flags |= 1 << (beforeRcVertex ? 8 : 9);
     }
 
     [mutating]
-    void insertIsTransmissionEvent(bool isTransmissionEvent, bool beforeRcVertex, bool isSecondRcVertex)
+    void insertIsTransmissionEvent(bool isTransmissionEvent, bool beforeRcVertex)
     {
-        if (isSecondRcVertex)
-        {
-            flags &= (beforeRcVertex ? ~(0x4000) : ~(0x8000));
-            if (isTransmissionEvent) flags |= 1 << (beforeRcVertex ? 14 : 15);
-        }
-        else
-        {
-            flags &= (beforeRcVertex ? ~(0x400) : ~(0x800));
-            if (isTransmissionEvent) flags |= 1 << (beforeRcVertex ? 10 : 11);
-        }
+        flags &= (beforeRcVertex ? ~(0x400) : ~(0x800));
+        if (isTransmissionEvent) flags |= 1 << (beforeRcVertex ? 10 : 11);
+    }
+
+    // currently doesn't support a material with both "SpecularReflectionMicrofacet" and "SpecularReflectionTransmissionMicrofacet" components
+    [mutating]
+    void insertIsSpecularBounce(bool isSpecularBounce, bool beforeRcVertex)
+    {
+        flags &= (beforeRcVertex ? ~(0x4000000) : ~(0x8000000));
+        if (isSpecularBounce) flags |= 1 << (beforeRcVertex ? 26 : 27);
     }
 
     [mutating]
-    void transferDeltaInformation(ReSTIRPathFlags srcPathFlags, bool isSecondRcVertex)
+    void transferDeltaInformation(ReSTIRPathFlags srcPathFlags)
     {
-        if (isSecondRcVertex)
-        {
-            flags &= ~(0x3000);
-            flags |= ((srcPathFlags.flags >> 12) & 3) << 12;
-        }
-        else
-        {
-            // transfer delta information for half vector reuse (TODO: refactor)
-            flags &= ~(0x300);
-            flags |= ((srcPathFlags.flags >> 8) & 3) << 8;
-        }
+        // transfer delta information for half vector reuse (TODO: refactor)
+        flags &= ~(0x300);
+        flags |= ((srcPathFlags.flags >> 8) & 3) << 8;
     }
 
     [mutating]
-    void transferTransmissionInformation(ReSTIRPathFlags srcPathFlags, bool isSecondRcVertex)
+    void transferTransmissionInformation(ReSTIRPathFlags srcPathFlags)
     {
-        if (isSecondRcVertex)
-        {
-            flags &= ~(0xc000);
-            flags |= ((srcPathFlags.flags >> 14) & 3) << 14;
-        }
-        else
-        {
-            // transfer delta information for half vector reuse (TODO: refactor)
-            flags &= ~(0xc00);
-            flags |= ((srcPathFlags.flags >> 10) & 3) << 10;
-        }
+        // transfer delta information for half vector reuse (TODO: refactor)
+        flags &= ~(0xc00);
+        flags |= ((srcPathFlags.flags >> 10) & 3) << 10;
     }
 
-    bool decodeIsDeltaEvent(bool beforeRcVertex, bool isSecondRcVertex)
+    [mutating]
+    void transferSpecularBounceInformation(ReSTIRPathFlags srcPathFlags)
     {
-        if (isSecondRcVertex)
-        {
-            if (beforeRcVertex) return (flags >> 12) & 1;
-            else return (flags >> 13) & 1;
-        }
-        else
-        {
-            if (beforeRcVertex) return (flags >> 8) & 1;
-            else return (flags >> 9) & 1;
-        }
+        // transfer delta information for half vector reuse (TODO: refactor)
+        flags &= ~(0xc000000);
+        flags |= ((srcPathFlags.flags >> 26) & 3) << 26;
     }
 
-    bool decodeIsTransmissionEvent(bool beforeRcVertex, bool isSecondRcVertex)
+    bool decodeIsDeltaEvent(bool beforeRcVertex)
     {
-        if (isSecondRcVertex)
-        {
-            if (beforeRcVertex) return (flags >> 14) & 1;
-            else return (flags >> 15) & 1;
-        }
-        else
-        {
-            if (beforeRcVertex) return (flags >> 10) & 1;
-            else return (flags >> 11) & 1;
-        }
+        if (beforeRcVertex) return (flags >> 8) & 1;
+        else return (flags >> 9) & 1;
     }
 
+    bool decodeIsTransmissionEvent(bool beforeRcVertex)
+    {
+        if (beforeRcVertex) return (flags >> 10) & 1;
+        else return (flags >> 11) & 1;
+    }
+
+    bool decodeIsSpecularBounce(bool beforeRcVertex)
+    {
+        if (beforeRcVertex) return (flags >> 26) & 1;
+        else return (flags >> 27) & 1;
+    }
 
     // maximum length: 15
     [mutating]
@@ -163,51 +137,6 @@ struct ReSTIRPathFlags
         return (flags >> 18) & 3;
     }
 
-    // currently doesn't support a material with both "SpecularReflectionMicrofacet" and "SpecularReflectionTransmissionMicrofacet" components
-    [mutating]
-    void insertIsSpecularBounce(bool isSpecularBounce, bool beforeRcVertex, bool isSecondRcVertex)
-    {
-        if (isSecondRcVertex)
-        {
-            flags &= (beforeRcVertex ? ~(0x10000000) : ~(0x20000000));
-            if (isSpecularBounce) flags |= 1 << (beforeRcVertex ? 28 : 29);
-        }
-        else
-        {
-            flags &= (beforeRcVertex ? ~(0x4000000) : ~(0x8000000));
-            if (isSpecularBounce) flags |= 1 << (beforeRcVertex ? 26 : 27);
-        }
-    }
-
-    bool decodeIsSpecularBounce(bool beforeRcVertex, bool isSecondRcVertex)
-    {
-        if (isSecondRcVertex)
-        {
-            if (beforeRcVertex) return (flags >> 28) & 1;
-            else return (flags >> 29) & 1;
-        }
-        else
-        {
-            if (beforeRcVertex) return (flags >> 26) & 1;
-            else return (flags >> 27) & 1;
-        }
-    }
-
-    [mutating]
-    void transferSpecularBounceInformation(ReSTIRPathFlags srcPathFlags, bool isSecondRcVertex)
-    {
-        if (isSecondRcVertex)
-        {
-            flags &= ~(0x30000000);
-            flags |= ((srcPathFlags.flags >> 28) & 3) << 28;
-        }
-        else
-        {
-            // transfer delta information for half vector reuse (TODO: refactor)
-            flags &= ~(0xc000000);
-            flags |= ((srcPathFlags.flags >> 26) & 3) << 26;
-        }
-    }
 };
 
 struct ReconnectionData

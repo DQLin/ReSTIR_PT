@@ -383,11 +383,10 @@ struct PathTracer
             // daqi: record delta and transmission event before/after rcVertex, this is important because such information will be used in computing the Jacobian in shift.slang
             if (path.length == path.pathBuilder.rcVertexLength)
             {
-                static const bool isSecondRcVertex = false;
-                path.pathBuilder.pathFlags.insertIsDeltaEvent(result.isLobe(LobeType::Delta), false, isSecondRcVertex);
-                path.pathBuilder.pathFlags.insertIsTransmissionEvent(result.isLobe(LobeType::Transmission), false, isSecondRcVertex);
+                path.pathBuilder.pathFlags.insertIsDeltaEvent(result.isLobe(LobeType::Delta), false);
+                path.pathBuilder.pathFlags.insertIsTransmissionEvent(result.isLobe(LobeType::Transmission), false);
                 if (kSeparatePathBSDF)
-                    path.pathBuilder.pathFlags.insertIsSpecularBounce(path.isSpecularBounce(), false, isSecondRcVertex);
+                    path.pathBuilder.pathFlags.insertIsSpecularBounce(path.isSpecularBounce(), false);
             }
 
             // Handle transmission events.
@@ -438,8 +437,8 @@ struct PathTracer
         bool valid = true;
         BSDFSample_ result;
 
-        bool isDeltaEvent = path.pathBuilder.pathFlags.decodeIsDeltaEvent(path.length < 1, false);
-        bool isSpecularBounce = path.pathBuilder.pathFlags.decodeIsSpecularBounce(path.length < 1, false);
+        bool isDeltaEvent = path.pathBuilder.pathFlags.decodeIsDeltaEvent(path.length < 1);
+        bool isSpecularBounce = path.pathBuilder.pathFlags.decodeIsSpecularBounce(path.length < 1);
 
         if (isDeltaEvent) valid = false; // not allowing delta event to be shifted by directional reuse
 
@@ -1175,10 +1174,10 @@ struct PathTracer
                 path.pathBuilder.rcVertexHit.initFromHitInfo(path.hit);
                 // daqi: save the scatter PDF as cachedJacobian
                 path.pathBuilder.cachedJacobian.x = path.prevScatterPdf;
-                path.pathBuilder.pathFlags.insertIsDeltaEvent(path.isDelta(), true, false);
-                path.pathBuilder.pathFlags.insertIsTransmissionEvent(path.isTransmission(), true, false);
+                path.pathBuilder.pathFlags.insertIsDeltaEvent(path.isDelta(), true);
+                path.pathBuilder.pathFlags.insertIsTransmissionEvent(path.isTransmission(), true);
                 if (kSeparatePathBSDF)
-                    path.pathBuilder.pathFlags.insertIsSpecularBounce(path.isSpecularBounce(), true, false);
+                    path.pathBuilder.pathFlags.insertIsSpecularBounce(path.isSpecularBounce(), true);
 
                 float3 disp = prevPathOrigin - sd.posW;
 
@@ -1228,10 +1227,9 @@ struct PathTracer
             // daqi: if next vertex is rcVertex and the shift is still invertible, then we should terminate
             if (path.length == path.pathBuilder.rcVertexLength - 1 && invertible)
             {
-                static const bool isSecondRcVertex = false;
                 // not possible to generate a diffuse bounce
                 if (params.localStrategyType & (uint)LocalStrategy::RoughnessCondition &&
-                        (kSeparatePathBSDF && (path.pathBuilder.pathFlags.decodeIsSpecularBounce(true, isSecondRcVertex) ? sd.linearRoughness <= params.specularRoughnessThreshold : !hasRoughComponent(sd, 1.f)) ||
+                        (kSeparatePathBSDF && (path.pathBuilder.pathFlags.decodeIsSpecularBounce(true) ? sd.linearRoughness <= params.specularRoughnessThreshold : !hasRoughComponent(sd, 1.f)) ||
                         !kSeparatePathBSDF && !isCurrentVertexClassifiedAsRough))
                 {
                     // daqi: invalidate the shift
@@ -1636,8 +1634,7 @@ struct PathTracer
 
         // this is also applicable for random number reuse
         path.pathBuilder.pathFlags.flags = 0;
-        static const bool isSecondRcVertex = false;
-        path.pathBuilder.pathFlags.transferSpecularBounceInformation(pathFlags, isSecondRcVertex);
+        path.pathBuilder.pathFlags.transferSpecularBounceInformation(pathFlags);
 
         // set up the two scatter directions (or half vectors) for reuse
 
@@ -1799,11 +1796,11 @@ struct PathTracer
             // start from path length
             float3 scatterDir = tempPathReservoir.rcVertexWi[0];
             path.pathBuilder.rcVertexLength = rcVertexLength;
-            path.origin = rcVertexSd.computeNewRayOrigin(!tempPathReservoir.pathFlags.decodeIsTransmissionEvent(false, false));
+            path.origin = rcVertexSd.computeNewRayOrigin(!tempPathReservoir.pathFlags.decodeIsTransmissionEvent(false));
 
-            path.pathBuilder.pathFlags.transferDeltaInformation(tempPathReservoir.pathFlags, false);
-            path.pathBuilder.pathFlags.transferTransmissionInformation(tempPathReservoir.pathFlags, false);
-            path.pathBuilder.pathFlags.transferSpecularBounceInformation(tempPathReservoir.pathFlags, false);
+            path.pathBuilder.pathFlags.transferDeltaInformation(tempPathReservoir.pathFlags);
+            path.pathBuilder.pathFlags.transferTransmissionInformation(tempPathReservoir.pathFlags);
+            path.pathBuilder.pathFlags.transferSpecularBounceInformation(tempPathReservoir.pathFlags);
             path.pathReservoir.rcVertexIrradiance[0] = 0.f;
 
             generateReplayPrimaryScatterRay(path, rcVertexSd, scatterDir);
