@@ -34,5 +34,5 @@
 #define _ENABLE_NVAPI       1 // Set this to 1 to enable NVIDIA specific DX extensions. Make sure you have the NVAPI package in your 'Externals' directory. View the readme for more information.
 #define _ENABLE_CUDA        0 // Set this to 1 to enable CUDA use and CUDA/DX interoperation. Make sure you have the CUDA SDK package in your 'Externals' directory. View the readme for more information.
 #define _ENABLE_OPTIX       0 // Set this to 1 to enable OptiX. Make sure you have the OptiX SDK package in your 'Externals' directory. View the readme for more information.
-#define _ENABLE_D3D12_AGILITY_SDK   1 // Set this to 1 to enable D3D12 Agility SDK. Make sure you have the Agility SDK package in your `Externals` directory. View the readme for more information.
+#define _ENABLE_D3D12_AGILITY_SDK   0 // Set this to 1 to enable D3D12 Agility SDK. Make sure you have the Agility SDK package in your `Externals` directory. View the readme for more information.
 #define FALCOR_ENABLE_NRD 0

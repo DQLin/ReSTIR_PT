@@ -30,7 +30,4 @@
     <dependency name="dxcompiler" linkPath="../Externals/.packman/dxcompiler">
         <package name="dxcompiler" version="1.6.2106" />
     </dependency>
-    <dependency name="agility-sdk" linkPath="../Externals/.packman/agility-sdk">
-        <package name="agility-sdk" version="1.4.10" remotes="nuget-agility-sdk" platforms="windows-x86_64"/>
-    </dependency>
 </project>
