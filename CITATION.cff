@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Lin
+    given-names: Daqi
+    orcid: https://orcid.org/0000-0002-5139-6418
+title: "ReSTIR Path Tracing (ReSTIR PT) paper implementation"
+version: 0.1
+date-released: 2022-05-04
