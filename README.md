@@ -19,7 +19,7 @@ See README_Falcor.md for the original README file provided by Falcor.
 
 ## Prerequisites
 - Windows 10 version 20H2 or newer
-- Visual Studio 2019
+- Visual Studio 2019 (If you're using VS2022, make sure to install the VS2019 build tools during setup or modification)
 - [Windows 10 SDK version 10.0.19041.1 Or Newer] (https://developer.microsoft.com/en-us/windows/downloads/sdk-archive)
 - NVIDIA driver 466.11 or newer
 - RTX 2060 or Higher (NVIDIA graphics card with raytracing support)
