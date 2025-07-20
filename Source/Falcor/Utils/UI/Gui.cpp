@@ -757,19 +757,19 @@ namespace Falcor
     template<typename T>
     bool GuiImpl::addVecVar(const char label[], T& var, typename T::value_type minVal, typename T::value_type maxVal, float step, bool sameLine, const char* displayFormat)
     {
-        if (std::is_same<T::value_type, int32_t>::value)
+        if (std::is_same<typename T::value_type, int32_t>::value)
         {
             return addVecVarHelper(label, var, ImGuiDataType_S32, minVal, maxVal, step, sameLine, displayFormat);
         }
-        else if (std::is_same<T::value_type, uint32_t>::value)
+        else if (std::is_same<typename T::value_type, uint32_t>::value)
         {
             return addVecVarHelper(label, var, ImGuiDataType_U32, minVal, maxVal, step, sameLine, displayFormat);
         }
-        else if (std::is_same<T::value_type, float>::value)
+        else if (std::is_same<typename T::value_type, float>::value)
         {
             return addVecVarHelper(label, var, ImGuiDataType_Float, minVal, maxVal, step, sameLine, displayFormat);
         }
-        else if (std::is_same<T::value_type, uint64_t>::value)
+        else if (std::is_same<typename T::value_type, uint64_t>::value)
         {
             return addVecVarHelper(label, var, ImGuiDataType_U64, minVal, maxVal, step, sameLine, displayFormat);
         }
@@ -793,15 +793,15 @@ namespace Falcor
     template<typename T>
     bool GuiImpl::addVecSlider(const char label[], T& var, typename T::value_type minVal, typename T::value_type maxVal, bool sameLine, const char* displayFormat)
     {
-        if (std::is_same<T::value_type, int32_t>::value)
+        if (std::is_same<typename T::value_type, int32_t>::value)
         {
             return addVecSliderHelper(label, var, ImGuiDataType_S32, minVal, maxVal, sameLine, displayFormat);
         }
-        else if (std::is_same<T::value_type, uint32_t>::value)
+        else if (std::is_same<typename T::value_type, uint32_t>::value)
         {
             return addVecSliderHelper(label, var, ImGuiDataType_U32, minVal, maxVal, sameLine, displayFormat);
         }
-        else if (std::is_same<T::value_type, float>::value)
+        else if (std::is_same<typename T::value_type, float>::value)
         {
             return addVecSliderHelper(label, var, ImGuiDataType_Float, minVal, maxVal, sameLine, displayFormat);
         }

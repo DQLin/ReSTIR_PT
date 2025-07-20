@@ -104,9 +104,9 @@ namespace Falcor
 
         // Check that reduction type T is compatible with the resource format.
         if (sizeof(typename T::value_type) != 4 ||     // The shader is written for 32-bit types
-            (formatType == FORMAT_TYPE_FLOAT && !std::is_floating_point<T::value_type>::value) ||
-            (formatType == FORMAT_TYPE_SINT && (!std::is_integral<T::value_type>::value || !std::is_signed<T::value_type>::value)) ||
-            (formatType == FORMAT_TYPE_UINT && (!std::is_integral<T::value_type>::value || !std::is_unsigned<T::value_type>::value)))
+            (formatType == FORMAT_TYPE_FLOAT && !std::is_floating_point<typename T::value_type>::value) ||
+            (formatType == FORMAT_TYPE_SINT && (!std::is_integral<typename T::value_type>::value || !std::is_signed<typename T::value_type>::value)) ||
+            (formatType == FORMAT_TYPE_UINT && (!std::is_integral<typename T::value_type>::value || !std::is_unsigned<typename T::value_type>::value)))
         {
             logError("ComputeParallelReduction::execute() - Template type T is not compatible with resource format. Aborting.");
             return false;

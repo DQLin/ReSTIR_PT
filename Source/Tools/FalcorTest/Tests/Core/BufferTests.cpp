@@ -63,7 +63,6 @@ namespace Falcor
             if constexpr (type == Type::ByteAddressBuffer) pBuffer = Buffer::create(numElems * sizeof(uint32_t), ResourceBindFlags::UnorderedAccess, Buffer::CpuAccess::None);
             else if constexpr (type == Type::TypedBuffer) pBuffer = Buffer::createTyped<uint32_t>(numElems, ResourceBindFlags::UnorderedAccess);
             else if constexpr (type == Type::StructuredBuffer) pBuffer = Buffer::createStructured(ctx.getProgram(), "buffer", numElems, ResourceBindFlags::UnorderedAccess);
-            else static_assert(false);
 
             ctx["buffer"] = pBuffer;
 
